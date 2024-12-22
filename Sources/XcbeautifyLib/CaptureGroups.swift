@@ -216,7 +216,7 @@ struct CodesignCaptureGroup: CaptureGroup {
 
     /// Regular expression captured groups:
     /// $1 = file
-    static let regex = XCRegex(pattern: #"^CodeSign\s(((?!.framework/Versions/A)(?:\ |[^ ]))*?)( \(in target '.*' from project '.*' at path '.*'\))?$"#)
+    static let regex = XCRegex(pattern: #"^CodeSign\s(((?!.framework\/Versions\/A)(?:\ |[^ ]))*?)( \(in target '.*' from project '.*' at path '.*'\))?$"#)
 
     let file: String
 
@@ -232,7 +232,7 @@ struct CodesignFrameworkCaptureGroup: CaptureGroup {
 
     /// Regular expression captured groups:
     /// $1 = file
-    static let regex = XCRegex(pattern: #"^CodeSign\s((?:\ |[^ ])*.framework)\/Versions/A"#)
+    static let regex = XCRegex(pattern: #"^CodeSign\s((?:\ |[^ ])*.framework)\/Versions\/A"#)
 
     let frameworkPath: String
 
@@ -288,7 +288,7 @@ struct SwiftCompileCaptureGroup: CompileFileCaptureGroup {
     /// $1 = file path
     /// $2 = target
     /// $3 = project
-    static let regex = XCRegex(pattern: #"^SwiftCompile \w+ \w+ ((?:\S|(?<=\\) )+) \(in target '(.*)' from project '(.*)'\)$"#)
+    static let regex = XCRegex(pattern: #"^SwiftCompile \w+ \w+ ((?!Compiling\\ ).*) \(in target '(.*)' from project '(.*)'\)$"#)
 
     let filePath: String
     let filename: String
@@ -379,8 +379,8 @@ struct CompileStoryboardCaptureGroup: CompileFileCaptureGroup {
 struct CopyFilesCaptureGroup: CaptureGroup {
     static let outputType: OutputType = .task
 
-    // ((?:\S|(?<=\\) )+) --> Match any non-whitespace character OR any escaped space (space in filename)
-    static let regex = XCRegex(pattern: #"^Copy ((?:\S|(?<=\\) )+) ((?:\S|(?<=\\) )+) \(in target '(.*)' from project '.*'\)$"#)
+    // ((?:\S|(?:\\ ))+) --> Match any non-whitespace character OR any escaped space (space in filename)
+    static let regex = XCRegex(pattern: #"^Copy ((?:\S|(?:\\ ))+) ((?:\S|(?:\\ ))+) \(in target '(.*)' from project '.*'\)$"#)
 
     let firstFilePath: String
     let firstFilename: String
@@ -929,7 +929,7 @@ struct ParallelTestCaseFailedCaptureGroup: CaptureGroup {
     /// $2 = test case
     /// $3 = installed app file and ID (e.g. "MyApp.app (12345)"), process (e.g. "xctest (12345)"), or device (e.g. "iPhone X")
     /// $4 = time
-    static let regex = XCRegex(pattern: #"^Test\s+case\s+'(.*)[\./](.*)\(\)'\s+failed\s+on\s+'(.*)'\s+\((\d*\.(.*){3})\s+seconds\)"#)
+    static let regex = XCRegex(pattern: #"^Test\s+case\s+'(.*)[\.\/](.*)\(\)'\s+failed\s+on\s+'(.*)'\s+\((\d*\.(.*){3})\s+seconds\)"#)
 
     let suite: String
     let testCase: String
@@ -1078,7 +1078,7 @@ struct ProcessPchCommandCaptureGroup: CaptureGroup {
 
     /// Regular expression captured groups:
     /// $1 file path
-    static let regex = XCRegex(pattern: #"^\s*.*\/usr\/bin\/clang\s.*\s\-c\s(.*?)(?<!\\)\s.*\-o\s.*\.gch"#)
+    static let regex = XCRegex(pattern: #"^\s*.*\/usr\/bin\/clang\s.*\s\-c\s(.*)\s\-o\s.*\.gch"#)
 
     let filePath: String
 
@@ -1408,7 +1408,7 @@ struct DuplicateLocalizedStringKeyCaptureGroup: CaptureGroup {
 
     /// Regular expresion captured groups:
     /// $1 = warning message.
-    static let regex = XCRegex(pattern: #"^[\d\s-:]+ --- WARNING: (Key ".*" used with multiple values. Value ".*" kept. Value ".*" ignored.)$"#)
+    static let regex = XCRegex(pattern: #"^[\d -:]+ --- WARNING: (Key ".*" used with multiple values. Value ".*" kept. Value ".*" ignored.)$"#)
 
     let warningMessage: String
 
@@ -1677,7 +1677,7 @@ struct ModuleIncludesErrorCaptureGroup: ErrorCaptureGroup {
 
     /// Regular expression captured groups:
     /// $1 = error reason
-    static let regex = XCRegex(pattern: #"^\<module-includes\>:.*?:.*?:\s(?:fatal\s)?(error:\s.*)$/"#)
+    static let regex = XCRegex(pattern: #"^\<module-includes\>:.*?:.*?:\s(?:fatal\s)?(error:\s.*)$\/"#)
 
     let wholeError: String
 
@@ -1860,7 +1860,7 @@ struct SwiftDriverJobDiscoveryCompilingCaptureGroup: CaptureGroup {
     // $3 = filenames
     // $4 = target
     // $5 = project
-    static let regex = XCRegex(pattern: #"^SwiftDriverJobDiscovery (\S+) (\S+) Compiling ((?:\S|(?>, )|(?<=\\) )+) \(in target '(.*)' from project '(.*)'\)"#)
+    static let regex = XCRegex(pattern: #"^SwiftDriverJobDiscovery (\S+) (\S+) Compiling (.*) \(in target '(.*)' from project '(.*)'\)"#)
 
     let state: String // Currently, the only expected/known value is `normal`
     let architecture: String
